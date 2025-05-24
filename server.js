@@ -16,11 +16,13 @@ app.use(express.urlencoded({ extended: true }));
 const productRoutes = require('./routes/productRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const requestRoutes = require('./routes/requestRoutes');
+const siteContentRoutes = require('./routes/siteContentRoutes');
 const settingRoutes = require('./routes/settingRoutes');
 
 app.use('/api/products', productRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/requests', requestRoutes);
+app.use('/api/site-content', siteContentRoutes);
 app.use('/api/settings', settingRoutes);
 
 // Basic route

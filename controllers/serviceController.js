@@ -1,4 +1,4 @@
-const supabase = require('../config/supabase');
+const { supabase } = require('../config/supabase');
 
 // Get all services
 const getServices = async (req, res) => {
@@ -9,9 +9,10 @@ const getServices = async (req, res) => {
       .order('id', { ascending: true });
 
     if (error) throw error;
-
+    console.log("DB RESULT:", data, "ERROR:", error);
     res.json(data);
   } catch (error) {
+    console.log("DB RESULT:", data, "ERROR:", error);
     res.status(500).json({ error: error.message });
   }
 };
