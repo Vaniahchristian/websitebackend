@@ -5,7 +5,8 @@ const getServices = async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('services')
-      .select('*');
+      .select('id, name, description, image')
+      .order('id', { ascending: true });
 
     if (error) throw error;
 
@@ -21,7 +22,7 @@ const getService = async (req, res) => {
     const { id } = req.params;
     const { data, error } = await supabase
       .from('services')
-      .select('*')
+      .select('id, name, description, image')
       .eq('id', id)
       .single();
 
@@ -39,9 +40,10 @@ const getService = async (req, res) => {
 // Create service
 const createService = async (req, res) => {
   try {
+    const { name, description, image } = req.body;
     const { data, error } = await supabase
       .from('services')
-      .insert([req.body])
+      .insert([{ name, description, image }])
       .select();
 
     if (error) throw error;
@@ -56,9 +58,10 @@ const createService = async (req, res) => {
 const updateService = async (req, res) => {
   try {
     const { id } = req.params;
+    const { name, description, image } = req.body;
     const { data, error } = await supabase
       .from('services')
-      .update(req.body)
+      .update({ name, description, image })
       .eq('id', id)
       .select();
 

@@ -5,8 +5,25 @@ const getRequests = async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('requests')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .select('id, name, phone, serviceType, description, location, paymentMethod, status, date')
+      .order('id', { ascending: false });
+
+    if (error) throw error;
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Get requests by status
+const getRequestsByStatus = async (req, res) => {
+  try {
+    const { status } = req.params;
+    const { data, error } = await supabase
+      .from('requests')
+      .select('id, name, phone, serviceType, description, location, paymentMethod, status, date')
+      .eq('status', status)
+      .order('id', { ascending: false });
 
     if (error) throw error;
     res.json(data);
@@ -21,7 +38,7 @@ const getRequest = async (req, res) => {
     const { id } = req.params;
     const { data, error } = await supabase
       .from('requests')
-      .select('*')
+      .select('id, name, phone, serviceType, description, location, paymentMethod, status, date')
       .eq('id', id)
       .single();
 
@@ -39,10 +56,16 @@ const getRequest = async (req, res) => {
 // Create request
 const createRequest = async (req, res) => {
   try {
+    const { name, phone, serviceType, description, location, paymentMethod } = req.body;
     const newRequest = {
-      ...req.body,
+      name,
+      phone,
+      serviceType,
+      description,
+      location,
+      paymentMethod,
       status: 'pending',
-      created_at: new Date().toISOString()
+      date: new Date().toISOString().split('T')[0]
     };
 
     const { data, error } = await supabase
@@ -51,7 +74,6 @@ const createRequest = async (req, res) => {
       .select();
 
     if (error) throw error;
-
     res.status(201).json(data[0]);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -62,15 +84,11 @@ const createRequest = async (req, res) => {
 const updateRequestStatus = async (req, res) => {
   try {
     const { id } = req.params;
-    const { status, adminNotes } = req.body;
+    const { status } = req.body;
 
     const { data, error } = await supabase
       .from('requests')
-      .update({
-        status,
-        admin_notes: adminNotes,
-        updated_at: new Date().toISOString()
-      })
+      .update({ status })
       .eq('id', id)
       .select();
 
@@ -95,25 +113,7 @@ const deleteRequest = async (req, res) => {
       .eq('id', id);
 
     if (error) throw error;
-
     res.json({ message: 'Request deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// Get requests by status
-const getRequestsByStatus = async (req, res) => {
-  try {
-    const { status } = req.params;
-    const { data, error } = await supabase
-      .from('requests')
-      .select('*')
-      .eq('status', status)
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-    res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -121,9 +121,9 @@ const getRequestsByStatus = async (req, res) => {
 
 module.exports = {
   getRequests,
+  getRequestsByStatus,
   getRequest,
   createRequest,
   updateRequestStatus,
-  deleteRequest,
-  getRequestsByStatus
+  deleteRequest
 };

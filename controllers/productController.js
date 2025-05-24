@@ -5,10 +5,10 @@ const getProducts = async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('products')
-      .select('*');
-
+      .select('id, name, description, price, image, category')
+      .order('id', { ascending: true });
+    
     if (error) throw error;
-
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -21,7 +21,7 @@ const getProduct = async (req, res) => {
     const { id } = req.params;
     const { data, error } = await supabase
       .from('products')
-      .select('*')
+      .select('id, name, description, price, image, category')
       .eq('id', id)
       .single();
 
@@ -36,16 +36,33 @@ const getProduct = async (req, res) => {
   }
 };
 
+// Get products by category
+const getProductsByCategory = async (req, res) => {
+  try {
+    const { category } = req.params;
+    const { data, error } = await supabase
+      .from('products')
+      .select('id, name, description, price, image, category')
+      .eq('category', category)
+      .order('id', { ascending: true });
+
+    if (error) throw error;
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // Create product
 const createProduct = async (req, res) => {
   try {
+    const { name, description, price, image, category } = req.body;
     const { data, error } = await supabase
       .from('products')
-      .insert([req.body])
+      .insert([{ name, description, price, image, category }])
       .select();
 
     if (error) throw error;
-
     res.status(201).json(data[0]);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -56,9 +73,10 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
+    const { name, description, price, image, category } = req.body;
     const { data, error } = await supabase
       .from('products')
-      .update(req.body)
+      .update({ name, description, price, image, category })
       .eq('id', id)
       .select();
 
@@ -83,7 +101,6 @@ const deleteProduct = async (req, res) => {
       .eq('id', id);
 
     if (error) throw error;
-
     res.json({ message: 'Product deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -93,6 +110,7 @@ const deleteProduct = async (req, res) => {
 module.exports = {
   getProducts,
   getProduct,
+  getProductsByCategory,
   createProduct,
   updateProduct,
   deleteProduct
