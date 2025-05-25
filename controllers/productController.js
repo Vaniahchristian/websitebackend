@@ -33,6 +33,8 @@ const getProductsByCategory = async (req, res) => {
       .from('products')
       .select('*')
       .eq('category', category);
+    console.log(data);    
+    console.log(error);
 
     if (error) throw error;
 
@@ -53,7 +55,8 @@ const getProduct = async (req, res) => {
       .select('*')
       .eq('id', id)
       .single();
-
+    console.log(data);
+    console.log(error);   
     if (error) throw error;
     if (!data) return res.status(404).json({ message: 'Product not found' });
 
@@ -73,7 +76,8 @@ const createProduct = async (req, res) => {
       .from('products')
       .insert([{ name, description, price, image, category }])
       .select();
-
+    console.log(data);
+    console.log(error);
     if (error) throw error;
 
     res.status(201).json(data[0]);
@@ -94,7 +98,8 @@ const updateProduct = async (req, res) => {
       .update({ name, description, price, image, category })
       .eq('id', id)
       .select();
-
+    console.log(data);
+    console.log(error);
     if (error) throw error;
     if (!data.length) return res.status(404).json({ message: 'Product not found' });
 
@@ -114,6 +119,7 @@ const deleteProduct = async (req, res) => {
       .from('products')
       .delete()
       .eq('id', id);
+    console.log(error);
 
     if (error) throw error;
 

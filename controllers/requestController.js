@@ -7,10 +7,12 @@ const getRequests = async (req, res) => {
       .from('requests')
       .select('id, name, phone, serviceType, description, location, paymentMethod, status, date')
       .order('id', { ascending: false });
+    console.log(data);
 
     if (error) throw error;
     res.json(data);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -24,10 +26,12 @@ const getRequestsByStatus = async (req, res) => {
       .select('id, name, phone, serviceType, description, location, paymentMethod, status, date')
       .eq('status', status)
       .order('id', { ascending: false });
+    console.log(data);
 
     if (error) throw error;
     res.json(data);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -41,7 +45,8 @@ const getRequest = async (req, res) => {
       .select('id, name, phone, serviceType, description, location, paymentMethod, status, date')
       .eq('id', id)
       .single();
-
+    console.log(data);
+    console.log(error);
     if (error) throw error;
     if (!data) {
       return res.status(404).json({ message: 'Request not found' });
@@ -49,6 +54,7 @@ const getRequest = async (req, res) => {
 
     res.json(data);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -72,10 +78,12 @@ const createRequest = async (req, res) => {
       .from('requests')
       .insert([newRequest])
       .select();
-
+    console.log(data);
+    console.log(error);
     if (error) throw error;
     res.status(201).json(data[0]);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -91,7 +99,8 @@ const updateRequestStatus = async (req, res) => {
       .update({ status })
       .eq('id', id)
       .select();
-
+    console.log(data);
+    console.log(error); 
     if (error) throw error;
     if (!data.length) {
       return res.status(404).json({ message: 'Request not found' });
@@ -111,10 +120,11 @@ const deleteRequest = async (req, res) => {
       .from('requests')
       .delete()
       .eq('id', id);
-
+    console.log(error);
     if (error) throw error;
     res.json({ message: 'Request deleted successfully' });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };

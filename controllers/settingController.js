@@ -6,6 +6,8 @@ const getSettings = async (req, res) => {
     const { data, error } = await supabase
       .from('settings')
       .select('*');
+    console.log(data);
+    console.log(error);
 
     if (error) throw error;
     
@@ -16,8 +18,9 @@ const getSettings = async (req, res) => {
     }, {});
 
     res.json(settingsObject);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (error) { 
+      console.log(error);
+      res.status(500).json({ error: error.message });
   }
 };
 
@@ -38,7 +41,8 @@ const getSetting = async (req, res) => {
 
     res.json({ key: data.key, value: data.value });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+      console.log(error);
+      res.status(500).json({ error: error.message });
   }
 };
 
@@ -61,7 +65,8 @@ const updateSetting = async (req, res) => {
 
     res.json({ key: data[0].key, value: data[0].value });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+      console.log(error);
+      res.status(500).json({ error: error.message });
   }
 };
 
@@ -86,7 +91,8 @@ const updateSettings = async (req, res) => {
 
     res.json({ message: 'Settings updated successfully' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+      console.log(error);
+      res.status(500).json({ error: error.message });
   }
 };
 

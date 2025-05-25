@@ -7,6 +7,8 @@ const getServices = async (req, res) => {
       .from('services')
       .select('id, name, description, image')
       .order('id', { ascending: true });
+    console.log(data);
+    console.log(error);
 
     if (error) throw error;
     console.log("DB RESULT:", data, "ERROR:", error);
@@ -26,6 +28,8 @@ const getService = async (req, res) => {
       .select('id, name, description, image')
       .eq('id', id)
       .single();
+    console.log(data);
+    console.log(error);
 
     if (error) throw error;
     if (!data) {
@@ -46,11 +50,13 @@ const createService = async (req, res) => {
       .from('services')
       .insert([{ name, description, image }])
       .select();
-
+    console.log(data);
+    console.log(error);
     if (error) throw error;
 
     res.status(201).json(data[0]);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -65,6 +71,8 @@ const updateService = async (req, res) => {
       .update({ name, description, image })
       .eq('id', id)
       .select();
+    console.log(data);
+    console.log(error);
 
     if (error) throw error;
     if (!data.length) {
@@ -73,6 +81,7 @@ const updateService = async (req, res) => {
 
     res.json(data[0]);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -85,11 +94,12 @@ const deleteService = async (req, res) => {
       .from('services')
       .delete()
       .eq('id', id);
-
+    console.log(error);
     if (error) throw error;
 
     res.json({ message: 'Service deleted successfully' });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };

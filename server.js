@@ -13,12 +13,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const requestRoutes = require('./routes/requestRoutes');
 const siteContentRoutes = require('./routes/siteContentRoutes');
 const settingRoutes = require('./routes/settingRoutes');
 
+app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/requests', requestRoutes);
