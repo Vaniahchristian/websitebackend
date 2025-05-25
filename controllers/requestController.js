@@ -1,11 +1,11 @@
-const supabase = require('../config/supabase');
+const { supabase } = require('../config/supabase');
 
 // Get all requests
 const getRequests = async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('requests')
-      .select('id, name, phone, serviceType, description, location, paymentMethod, status, date')
+      .select('id, name, phone, servicetype, description, location, paymentmethod, status, date')
       .order('id', { ascending: false });
     console.log(data);
 
@@ -23,7 +23,7 @@ const getRequestsByStatus = async (req, res) => {
     const { status } = req.params;
     const { data, error } = await supabase
       .from('requests')
-      .select('id, name, phone, serviceType, description, location, paymentMethod, status, date')
+      .select('id, name, phone, servicetype, description, location, paymentmethod, status, date')
       .eq('status', status)
       .order('id', { ascending: false });
     console.log(data);
@@ -42,7 +42,7 @@ const getRequest = async (req, res) => {
     const { id } = req.params;
     const { data, error } = await supabase
       .from('requests')
-      .select('id, name, phone, serviceType, description, location, paymentMethod, status, date')
+      .select('id, name, phone, servicetype, description, location, paymentmethod, status, date')
       .eq('id', id)
       .single();
     console.log(data);
@@ -62,14 +62,14 @@ const getRequest = async (req, res) => {
 // Create request
 const createRequest = async (req, res) => {
   try {
-    const { name, phone, serviceType, description, location, paymentMethod } = req.body;
+    const { name, phone, servicetype, description, location, paymentmethod } = req.body;
     const newRequest = {
       name,
       phone,
-      serviceType,
+      servicetype,
       description,
       location,
-      paymentMethod,
+      paymentmethod,
       status: 'pending',
       date: new Date().toISOString().split('T')[0]
     };
